@@ -10,7 +10,7 @@ const io = socketio(server)
 
 app.use(express.static(path.resolve(__dirname, 'static')))
 
-server.listen(3000, (err) => {
+server.listen(80, (err) => {
   if (err) throw err
   console.log('http://localhost:3000/')
 })
@@ -29,7 +29,7 @@ channelPlayer.on('connection', (client) => {
   })
 
   client.on('client:input', (data) => {
-    console.log(data)
+    //console.log(data)
     io.emit('client:input', data)
   })
 })
