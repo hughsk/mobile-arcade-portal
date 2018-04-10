@@ -1,0 +1,25 @@
+{
+  "name": "mobile-arcade-captive-portal",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prod": "browserify -i index.js -o static/bundle.js && node server",
+    "start": "npm-run-all -p start:*",
+    "start:bundle": "watchify index.js -o static/bundle.js",
+    "start:server": "node server",
+    "start:styles": "postcss index.css --use autoprefixer -o static/bundle.css -w"
+  },
+  "dependencies": {
+    "@hughsk/fulltilt": "^0.7.1",
+    "autoprefixer": "^8.2.0",
+    "browserify": "^16.1.0",
+    "d3-scale-chromatic": "^1.2.0",
+    "express": "^4.16.2",
+    "npm-run-all": "^4.1.2",
+    "postcss-cli": "^5.0.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
+    "touches": "^1.2.2",
+    "watchify": "^3.11.0"
+  }
+}

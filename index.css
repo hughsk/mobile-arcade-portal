@@ -1,0 +1,192 @@
+@keyframes bounce {
+  0% {
+    transform: scale(0.95, 0.95);
+  }
+
+  100% {
+    transform: scale(1.05, 1.05);
+  }
+}
+
+body, html {
+  overflow: hidden;
+  width: 100%; height: 100%;
+  position: absolute;
+  background: #f2f2f2;
+  color: #444;
+  margin: 0; padding: 0;
+  top: 0; left: 0;
+  font-family: juaregular, Arial, Helvetica, sans-serif;
+  transition: background-color 0.5s;
+}
+
+h1 {
+  font-weight: 300;
+  margin: 0; padding: 0;
+  font-size: 4rem;
+}
+
+h2 {
+  margin: 0; padding: 0;
+  font-size: 2rem;
+}
+
+body {
+  background: #444;
+  color: #fff;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+section {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin: 0 auto;
+  position: absolute;
+  top: 0; left: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+section[name=intro] h1,
+section[name=intro] h2 {
+  opacity: 0;
+  transition: transform 0.4s, opacity 0.4s;
+}
+
+section[name=intro] h1 {
+  transform: translate(0, -3rem);
+}
+
+section[name=intro] h2 {
+  transform: translate(0, 3rem);
+}
+
+section[name=intro].current h1,
+section[name=intro].current h2 {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+section[name=controller] {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+section[name=controller] .left {
+  cursor: move;
+  width: 80vmin;
+  height: 80vmin;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 4px dashed #fff;
+  border-radius: 50%;
+}
+
+section[name=controller] button[name=action] {
+  background: #a88;
+}
+
+section[name=controller] button {
+  position: relative;
+  width: 30vmin;
+  height: 30vmin;
+  appearance: none;
+  background: transparent;
+  border: 0;
+}
+
+section[name=controller] {
+  transform: scale(0, 0);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+section[name=controller].current {
+  transform: scale(1, 1);
+}
+
+section[name=controller] button {
+  transform: scale(0, 0);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+section[name=controller].current button {
+  transform: scale(1, 1);
+  transition: transform 0.4s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+section[name=controller] button > span {
+  transform: translate(0, 0);
+  animation: bounce 0.45s cubic-bezier(0.95, 0.05, 0.795, 0.035) 0s infinite alternate;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 12px solid #fff;
+  box-sizing: border-box;
+  background-image: url(icon/icon-move.svg);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 70%;
+  border-radius: 50%;
+}
+
+section[name=controller] button.active > span,
+section[name=controller] button:active > span {
+  background-color: #fff;
+  animation: none;
+  transition: background-color 0.25s;
+}
+
+section[name=controller] button > span > span {
+  display: none;
+}
+
+[hidden] {
+  display: none;
+}
+
+section[name=controller] h1 {
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  font-size: 2rem;
+  bottom: 0;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0; padding: 0;
+  opacity: 0;
+  transform: translate(0, 3rem);
+}
+
+section[name=controller].current h1 {
+  opacity: 1;
+  transform: translate(0, 0);
+  transition: transform 0.4s 0.35s, opacity 0.4s 0.35s;
+}
+
+@media screen and (orientation: landscape) {
+  section[name=controller].current .left {
+    transform: scale(0.75, 0.75);
+  }
+}
+
+@media screen and (orientation: portrait) {
+  section[name=controller] h1 {
+    height: calc((100vh - 80vmin) / 2);
+  }
+}
