@@ -19,3 +19,5 @@ npm start
 This will open a server on `http://localhost:3000/`. You can access it from this address on your computer, or alternatively find out your local IP address (e.g. `http://192.168.0.12:3000/`) using `ipconfig` (Windows) or `ifconfig` (Mac/Linux) to access it from a phone that is connected to the same WiFi network.
 
 Note that this will not always work on every network. If you're not able to connect to the server from your phone, I would recommend running a WiFi hotspot from that phone and connecting to that from your computer.
+
+<!-- git commit bump -->
