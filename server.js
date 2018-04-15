@@ -1,14 +1,34 @@
 const { interpolateRainbow } = require('d3-scale-chromatic')
 const express = require('express')
 const socketio = require('socket.io')
+const through2 = require('through2')
 const path = require('path')
 const http = require('http')
+const net = require('net')
 
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server, {
   wsEngine: 'ws',
   transports: ['websocket', 'polling']
+})
+
+const sockets = []
+const tcp = net.createServer((client) => {
+  const target = through2()
+
+  sockets.push(target)
+
+  target.pipe(client)
+  client.pipe(process.stdout)
+  client.once('close', () => {
+    var idx = sockets.indexOf(client)
+    if (idx !== -1) sockets.splice(client, 1)
+  })
+}).once('error', (err) => {
+  throw err
+}).listen(3001, () => {
+  console.log(' tcp://localhost:3001/')
 })
 
 app.use(express.static(path.resolve(__dirname, 'static')))
@@ -28,18 +48,18 @@ channelPlayer.on('connection', (client) => {
   var color = colorLUT[client.id] = getRandomColor()
 
   // broadcast color to game clients
-  io.emit('client:connect', toRGB(client.id, color))
+  broadcast('client-connect:' + JSON.stringify(toRGB(client.id, color)))
 
   // detect disconnection and broadcast to game
   client.on('disconnect', () => {
     delete colorLUT[color]
     colors.push(color)
-    io.emit('client:disconnect', client.id)
+    broadcast('client-disconnect:' + client.id)
   })
 
   // broadcast input events
   client.on('client:input', (data) => {
-    io.emit('client:input', data)
+    broadcast('client-input:' + data)
   })
 
   // pass color to client on first connection
@@ -54,25 +74,25 @@ channelPlayer.on('connection', (client) => {
 io.on('connection', (server) => {
   console.log("HOST CONNECTED", server.id, server.nsp.name)
 
-  server.on('server:populate', (_, next) => {
-    var players = io.of('player').connected
+  // server.on('server:populate', (_, next) => {
+  //   var players = io.of('player').connected
 
-    console.log('Game started!')
-    console.log('Existing players and their colours requested')
+  //   console.log('Game started!')
+  //   console.log('Existing players and their colours requested')
 
-    for (var id in players) {
-      if (!colorLUT[id]) continue
-      server.emit('client:connect', toRGB(id, colorLUT[id]))
-    }
+  //   for (var id in players) {
+  //     if (!colorLUT[id]) continue
+  //     server.emit('client:connect', toRGB(id, colorLUT[id]))
+  //   }
 
-    server.once('disconnect', () => {
-      console.log('disconnected :O')
-    })
-  })
+  //   server.once('disconnect', () => {
+  //     console.log('disconnected :O')
+  //   })
+  // })
 
-  server.on('server:keepalive', () => {
-    console.log('server keepalive fired')
-  })
+  // server.on('server:keepalive', () => {
+  //   console.log('server keepalive fired')
+  // })
 })
 
 function getRandomColor () {
@@ -98,5 +118,14 @@ var colorCount = 12
 function populateColors () {
   for (var i = 0; i < colorCount; i++) {
     colors[i] = interpolateRainbow(i / colorCount)
+  }
+}
+
+function broadcast (data) {
+  data = String(data)
+
+  for (var i = 0; i < sockets.length; i++) {
+    sockets[i].push(data)
+    sockets[i].push('\n')
   }
 }
