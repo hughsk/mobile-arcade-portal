@@ -25,6 +25,16 @@ const tcp = net.createServer((client) => {
     var idx = sockets.indexOf(client)
     if (idx !== -1) sockets.splice(client, 1)
   })
+
+  var players = io.of('player').connected
+
+  console.log('Game started!')
+  console.log('Existing players and their colours requested')
+
+  for (var id in players) {
+    if (!colorLUT[id]) continue
+    broadcast('client-connect:' + JSON.stringify(toRGB(id, colorLUT[id])))
+  }
 }).once('error', (err) => {
   throw err
 }).listen(3001, () => {
