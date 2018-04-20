@@ -17,10 +17,10 @@ const sockets = []
 const tcp = net.createServer((client) => {
   const target = through2()
 
+  target.pipe(client)
   sockets.push(target)
 
-  target.pipe(client)
-  client.pipe(process.stdout)
+  client.setNoDelay(true)
   client.once('close', () => {
     var idx = sockets.indexOf(client)
     if (idx !== -1) sockets.splice(client, 1)
@@ -69,7 +69,7 @@ channelPlayer.on('connection', (client) => {
 
   // broadcast input events
   client.on('client:input', (data) => {
-    broadcast('client-input:' + data)
+    broadcast('ci:' + data)
   })
 
   // pass color to client on first connection
@@ -135,7 +135,6 @@ function broadcast (data) {
   data = String(data)
 
   for (var i = 0; i < sockets.length; i++) {
-    sockets[i].push(data)
-    sockets[i].push('\n')
+    sockets[i].push(data + '\n')
   }
 }
