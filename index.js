@@ -1,9 +1,9 @@
-// const fulltilt = require('@hughsk/fulltilt/dist/fulltilt.js')
-const Sections = require('./lib/sections')
-const Controls = require('./lib/controls')
+// var fulltilt = require('@hughsk/fulltilt/dist/fulltilt.js')
+var Sections = require('./lib/sections')
+var Controls = require('./lib/controls')
 
-const HOST = window.location.protocol + '//' + window.location.host + '/player'
-const client = require('socket.io-client')(HOST, {
+var HOST = window.location.protocol + '//' + window.location.host + '/player'
+var client = require('socket.io-client')(HOST, {
   transports: ['websocket', 'polling']
 })
 
@@ -14,9 +14,9 @@ window.addEventListener('gesturestart', function (e) {
   return e.preventDefault()
 }, false)
 
-const introSubtitle = document.querySelector('section[name=intro] h2')
-const changeSection = Sections('intro')
-const controls = Controls(client, document.querySelector('section[name=controller]'))
+var introSubtitle = document.querySelector('section[name=intro] h2')
+var changeSection = Sections('intro')
+var controls = Controls(client, document.querySelector('section[name=controller]'))
 
 client.once('connect', function () {
   client.on('client:color', function (color) {
