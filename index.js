@@ -20,6 +20,7 @@ var controls = Controls(client, document.querySelector('section[name=controller]
 
 client.once('connect', function () {
   client.on('client:color', function (color) {
+    document.querySelector('[name=controller] h2').innerHTML = color.name
     document.body.style.backgroundColor = 'rgb(' + [color.red, color.green, color.blue].join(', ') + ')'
 
     client.emit('client:roundtrip', client.id, function () {

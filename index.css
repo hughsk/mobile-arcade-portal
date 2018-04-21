@@ -177,7 +177,24 @@ section[name=controller] h1 {
   transform: translate(0, 3rem);
 }
 
-section[name=controller].current h1 {
+section[name=controller] h2 {
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  font-size: 2rem;
+  top: 0;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0; padding: 0;
+  opacity: 0;
+  transform: translate(0, -3rem);
+}
+
+section[name=controller].current h1,
+section[name=controller].current h2 {
   opacity: 1;
   transform: translate(0, 0);
   transition: transform 0.4s 0.35s, opacity 0.4s 0.35s;
@@ -190,7 +207,8 @@ section[name=controller].current h1 {
 }
 
 @media screen and (orientation: portrait) {
-  section[name=controller] h1 {
+  section[name=controller] h1,
+  section[name=controller] h2 {
     height: calc((100vh - 80vmin) / 2);
   }
 }
